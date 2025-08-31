@@ -8,7 +8,10 @@ import jwt from "jsonwebtoken";
 dotenv.config();
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: "https://projeto-evento.netlify.app/"
+}));
+
 app.use(express.json());
 
 // Conectar ao Supabase
