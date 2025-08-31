@@ -1,3 +1,5 @@
+const BASE_URL = "https://projeto-evento.onrender.com"; // URL do backend no Render
+
 const loginForm = document.getElementById("loginForm");
 const msg = document.getElementById("msg");
 
@@ -8,7 +10,7 @@ loginForm.addEventListener("submit", async (e) => {
   const senha = document.getElementById("senha").value;
 
   try {
-    const res = await fetch("http://localhost:3000/login", {
+    const res = await fetch(`${BASE_URL}/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, senha })
@@ -20,7 +22,6 @@ loginForm.addEventListener("submit", async (e) => {
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
       msg.textContent = "Login realizado com sucesso!";
-      // redireciona para página de participantes
       window.location.href = "participantes.html";
     } else {
       msg.textContent = data.error;
@@ -29,12 +30,13 @@ loginForm.addEventListener("submit", async (e) => {
     msg.textContent = "Erro ao conectar com o servidor.";
   }
 });
+
 // Função para carregar participantes
 async function loadParticipantes() {
   const tbody = document.querySelector("#participantesTable tbody");
   tbody.innerHTML = "";
   try {
-    const res = await fetch("http://localhost:3000/participantes");
+    const res = await fetch(`${BASE_URL}/participantes`);
     const data = await res.json();
 
     data.forEach(p => {
@@ -60,7 +62,7 @@ addForm.addEventListener("submit", async (e) => {
   const documento = document.getElementById("documento").value;
 
   try {
-    const res = await fetch("http://localhost:3000/participantes", {
+    const res = await fetch(`${BASE_URL}/participantes`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ nome, documento })
@@ -77,14 +79,15 @@ addForm.addEventListener("submit", async (e) => {
   }
 });
 
-// Carrega a lista ao abrir a página
+// Carrega participantes ao abrir
 loadParticipantes();
+
 // Função para carregar brindes
 async function loadBrindes() {
   const tbody = document.querySelector("#brindesTable tbody");
   tbody.innerHTML = "";
   try {
-    const res = await fetch("http://localhost:3000/brindes");
+    const res = await fetch(`${BASE_URL}/brindes`);
     const data = await res.json();
 
     data.forEach(b => {
@@ -109,7 +112,7 @@ addBrindeForm.addEventListener("submit", async (e) => {
   const quantidade = parseInt(document.getElementById("brindeQuantidade").value);
 
   try {
-    const res = await fetch("http://localhost:3000/brindes", {
+    const res = await fetch(`${BASE_URL}/brindes`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ nome, quantidade })
@@ -128,8 +131,9 @@ addBrindeForm.addEventListener("submit", async (e) => {
 
 // Carrega brindes ao abrir
 loadBrindes();
-const pontuacaoForm = document.getElementById("pontuacaoForm");
 
+// Atualizar pontuação
+const pontuacaoForm = document.getElementById("pontuacaoForm");
 pontuacaoForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const participante_id = document.getElementById("participanteId").value;
@@ -137,7 +141,7 @@ pontuacaoForm.addEventListener("submit", async (e) => {
   const motivo = document.getElementById("motivo").value;
 
   try {
-    const res = await fetch("http://localhost:3000/pontuacao", {
+    const res = await fetch(`${BASE_URL}/pontuacao`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ participante_id, pontos, motivo })
@@ -154,6 +158,7 @@ pontuacaoForm.addEventListener("submit", async (e) => {
     alert("Erro ao conectar com servidor");
   }
 });
+
 // Logout
 const logoutBtn = document.getElementById("logout");
 if (logoutBtn) {
@@ -165,7 +170,7 @@ if (logoutBtn) {
 }
 
 // Proteção de páginas (verifica se está logado)
-if (window.location.pathname !== "/index.html") {
+if (!window.location.href.includes("index.html")) {
   const token = localStorage.getItem("token");
   if (!token) {
     window.location.href = "index.html";
