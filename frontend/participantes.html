@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Participantes - Evento</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="menu">
+  <nav>
+    <a href="participantes.html">Participantes</a>
+    <a href="brindes.html">Brindes</a>
+    <a href="pontuacao.html">Pontuação</a>
+    <a href="#" id="logout">Sair</a>
+  </nav>
+</header>
+
+  <h1>Participantes</h1>
+
+  <form id="addParticipanteForm">
+    <input type="text" id="nome" placeholder="Nome" required>
+    <input type="text" id="documento" placeholder="Documento" required>
+    <button type="submit">Adicionar Participante</button>
+  </form>
+
+  <h2>Lista de Participantes</h2>
+  <table id="participantesTable">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Documento</th>
+        <th>Pontos</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

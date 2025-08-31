@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pontuação - Evento</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="menu">
+  <nav>
+    <a href="participantes.html">Participantes</a>
+    <a href="brindes.html">Brindes</a>
+    <a href="pontuacao.html">Pontuação</a>
+    <a href="#" id="logout">Sair</a>
+  </nav>
+</header>
+
+  <h1>Adicionar/Remover Pontos</h1>
+
+  <form id="pontuacaoForm">
+    <input type="text" id="participanteId" placeholder="ID do Participante" required>
+    <input type="number" id="pontos" placeholder="Pontos" required>
+    <input type="text" id="motivo" placeholder="Motivo" required>
+    <button type="submit">Atualizar Pontuação</button>
+  </form>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

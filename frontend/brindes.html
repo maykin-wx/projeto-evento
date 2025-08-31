@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brindes - Evento</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="menu">
+  <nav>
+    <a href="participantes.html">Participantes</a>
+    <a href="brindes.html">Brindes</a>
+    <a href="pontuacao.html">Pontuação</a>
+    <a href="#" id="logout">Sair</a>
+  </nav>
+</header>
+
+  <h1>Brindes</h1>
+
+  <form id="addBrindeForm">
+    <input type="text" id="brindeNome" placeholder="Nome do Brinde" required>
+    <input type="number" id="brindeQuantidade" placeholder="Quantidade" required>
+    <button type="submit">Adicionar Brinde</button>
+  </form>
+
+  <h2>Lista de Brindes</h2>
+  <table id="brindesTable">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Quantidade</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
