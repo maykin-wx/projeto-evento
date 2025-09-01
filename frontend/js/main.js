@@ -34,6 +34,29 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
+// Mostrar nome do usuário logado
+// Mostrar nome do usuário logado com saudação dinâmica
+const usuarioLogadoDiv = document.getElementById("usuarioLogado");
+
+if (usuarioLogadoDiv) {
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  if (user) {
+    const hora = new Date().getHours();
+    let saudacao = "";
+
+    if (hora >= 5 && hora < 12) {
+      saudacao = "Bom dia";
+    } else if (hora >= 12 && hora < 18) {
+      saudacao = "Boa tarde";
+    } else {
+      saudacao = "Boa noite";
+    }
+
+    usuarioLogadoDiv.innerHTML = `${saudacao}, <span style="color: #00ff41; font-weight: bold;">${user.nome}</span>`;
+  }
+}
+
 
   // --- Logout ---
   const logoutBtn = document.getElementById("logout");

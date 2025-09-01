@@ -42,7 +42,9 @@ body {
 .cyber-table td:nth-child(1) {
   min-width: 220px; /* ID */
 }
-
+.usuario-info{
+    color: white;
+}
 .cyber-table th:nth-child(2),
 .cyber-table td:nth-child(2) {
   min-width: 160px; /* Nome */
