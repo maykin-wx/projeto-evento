@@ -1,41 +1,125 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Participantes - Evento</title>
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/stylelogin.css" />
 </head>
 <body>
-    <header class="menu">
-  <nav>
-    <a href="participantes.html">Participantes</a>
-    <a href="brindes.html">Brindes</a>
-    <a href="pontuacao.html">Pontuação</a>
-    <a href="#" id="logout">Sair</a>
-  </nav>
-</header>
+  <!-- Grade neon de fundo -->
+  <div class="cyber-grid">
+    <div class="grid-line grid-h-1"></div>
+    <div class="grid-line grid-v-1"></div>
+    <div class="grid-line grid-h-2"></div>
+    <div class="grid-line grid-v-2"></div>
+    <div class="grid-line grid-h-3"></div>
+    <div class="cyber-glitch glitch-1"></div>
+    <div class="cyber-glitch glitch-2"></div>
+  </div>
 
-  <h1>Participantes</h1>
+  <!-- Container principal -->
+  <main class="cyber-terminal2 full-width-terminal">
 
-  <form id="addParticipanteForm">
-    <input type="text" id="nome" placeholder="Nome" required>
-    <input type="text" id="documento" placeholder="Documento" required>
-    <button type="submit">Adicionar Participante</button>
-  </form>
+    <!-- Barra superior com título e menu juntos -->
+    <div class="terminal-header terminal-header-flex">
+      <div class="terminal-left">
+        <div class="terminal-buttons">
+          <div class="term-btn btn-red"></div>
+          <div class="term-btn btn-yellow"></div>
+          <div class="term-btn btn-green"></div>
+        </div>
+        <div class="terminal-title">Participantes</div>
+      </div>
 
-  <h2>Lista de Participantes</h2>
-  <table id="participantesTable">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Nome</th>
-        <th>Documento</th>
-        <th>Pontos</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+      <nav class="terminal-menu">
+  <a href="participantes.html" class="nav-link active menu-btn">Participantes</a>
+  <a href="brindes.html" class="nav-link menu-btn">Brindes</a>
+  <a href="pontuacao.html" class="nav-link menu-btn">Pontuação</a>
+  <a href="#" id="logout" class="nav-link logout-link menu-btn">Sair</a>
+</nav>
+
+    </div>
+
+    <div class="cyber-content">
+      <!-- Formulário adicionar participante -->
+      <!-- Formulário adicionar participante -->
+<form id="addParticipanteForm" class="neon-form" novalidate>
+  
+  <!-- Campo ID (manual) -->
+  <div class="cyber-field">
+    <div class="field-frame">
+      <div class="field-border"></div>
+      <input
+        type="number"
+        id="id"
+        name="id"
+        placeholder="ID (apenas números, até 10 dígitos)"
+        required
+        autocomplete="off"
+        pattern="\d{1,10}"
+        maxlength="10"
+      />
+      <label for="id">&gt; ID</label>
+      <div class="cyber-scanner"><div class="scan-line"></div></div>
+    </div>
+  </div>
+
+  <!-- Campo Nome -->
+  <div class="cyber-field">
+    <div class="field-frame">
+      <div class="field-border"></div>
+      <input type="text" id="nome" name="nome" placeholder="Nome" required autocomplete="off" />
+      <label for="nome">&gt; NOME</label>
+      <div class="cyber-scanner"><div class="scan-line"></div></div>
+    </div>
+  </div>
+
+  <!-- Campo Documento -->
+  <div class="cyber-field">
+    <div class="field-frame">
+      <div class="field-border"></div>
+      <input type="text" id="documento" name="documento" placeholder="Documento" required autocomplete="off" />
+      <label for="documento">&gt; DOCUMENTO</label>
+      <div class="cyber-scanner"><div class="scan-line"></div></div>
+    </div>
+  </div>
+
+  <!-- Botão -->
+  <button type="submit" class="neon-button">
+    <div class="btn-matrix "></div>
+    <span class="btn-text">[ Adicionar Participante ]</span>
+    <div class="btn-loader">
+      <div class="matrix-loader">
+        <div class="matrix-bar"></div>
+        <div class="matrix-bar"></div>
+        <div class="matrix-bar"></div>
+        <div class="matrix-bar"></div>
+      </div>
+    </div>
+    <div class="btn-glow"></div>
+  </button>
+
+</form>
+
+
+      <!-- Lista de participantes -->
+      <h2 class="cyber-subtitle">Lista de Participantes</h2>
+      <div class="table-wrapper">
+        <table id="participantesTable" class="cyber-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nome</th>
+              <th>Documento</th>
+              <th>Pontos</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </main>
 
   <script src="js/main.js"></script>
 </body>

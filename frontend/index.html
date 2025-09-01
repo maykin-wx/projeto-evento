@@ -3,18 +3,101 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - Evento</title>
-  <link rel="stylesheet" href="css/style.css">
+  <title>Neon Cyber Login</title>
+  <link rel="stylesheet" href="css/stylelogin.css"> <!-- mantenha seu CSS aqui -->
 </head>
 <body>
-  <div class="container">
-    <h1>Login Admin</h1>
-    <form id="loginForm">
-      <input type="email" id="email" placeholder="Email" required>
-      <input type="password" id="senha" placeholder="Senha" required>
-      <button type="submit">Entrar</button>
-    </form>
-    <p id="msg"></p>
+  <!-- Grade Cyber -->
+  <div class="cyber-grid">
+    <div class="grid-line grid-h-1"></div>
+    <div class="grid-line grid-v-1"></div>
+    <div class="grid-line grid-h-2"></div>
+    <div class="grid-line grid-v-2"></div>
+    <div class="grid-line grid-h-3"></div>
+    <div class="cyber-glitch glitch-1"></div>
+    <div class="cyber-glitch glitch-2"></div>
+  </div>
+
+  <!-- Container Principal -->
+  <div class="login-container">
+    <div class="cyber-terminal">
+      <div class="terminal-header">
+        <div class="terminal-buttons">
+          <div class="term-btn btn-red"></div>
+          <div class="term-btn btn-yellow"></div>
+          <div class="term-btn btn-green"></div>
+        </div>
+        <div class="terminal-title">Login Admin</div>
+      </div>
+
+      <div class="cyber-content">
+        <!-- Cabeçalho Neon -->
+        <div class="neon-header">
+          <div class="cyber-logo">
+            <div class="logo-frame">
+              <div class="logo-core">
+                <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                  <path d="M20 4L36 12v16L20 36L4 28V12L20 4z" stroke="currentColor" stroke-width="2" fill="none"/>
+                  <circle cx="20" cy="20" r="6" stroke="currentColor" stroke-width="1.5"/>
+                  <path d="M14 14l12 12M26 14l-12 12" stroke="currentColor" stroke-width="1"/>
+                </svg>
+              </div>
+              <div class="logo-scanner"></div>
+            </div>
+            <div class="neon-glow"></div>
+          </div>
+          <h1 class="cyber-title">
+            <span class="title-glitch" data-text="CYPHER_NET">Você na ETEC</span>
+          </h1>
+          <p class="access-text">Faça seu login para gerenciar evento</p>
+        </div>
+
+        <!-- Formulário -->
+        <form class="neon-form" id="loginForm" novalidate>
+          <!-- Campo Email -->
+          <div class="cyber-field">
+            <div class="field-frame">
+              <div class="field-border"></div>
+              <input type="email" id="email" name="email" placeholder="Email" required autocomplete="username">
+              <label for="email">&gt; EMAIL</label>
+              <div class="cyber-scanner">
+                <div class="scan-line"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Campo Senha -->
+          <div class="cyber-field">
+            <div class="field-frame">
+              <div class="field-border"></div>
+              <input type="password" id="senha" name="senha" placeholder="Senha" required autocomplete="current-password">
+              <label for="senha">&gt; SENHA</label>
+              <div class="cyber-scanner">
+                <div class="scan-line"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Botão -->
+          <button type="submit" class="neon-button">
+            <div class="btn-matrix"></div>
+            <span class="btn-text">[ Entrar ]</span>
+            <div class="btn-loader">
+              <div class="matrix-loader">
+                <div class="matrix-bar"></div>
+                <div class="matrix-bar"></div>
+                <div class="matrix-bar"></div>
+                <div class="matrix-bar"></div>
+              </div>
+            </div>
+            <div class="btn-glow"></div>
+          </button>
+        </form>
+
+        <!-- Mensagem dinâmica -->
+        <p id="msg"></p>
+      </div>
+    </div>
   </div>
 
   <script src="js/main.js"></script>
