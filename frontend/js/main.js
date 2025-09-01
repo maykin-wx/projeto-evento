@@ -191,30 +191,32 @@ if (resgatarForm) {
 // Confirmar admin no modal
 const confirmAdminBrindeBtn = document.getElementById("confirmAdminBrinde");
 if (confirmAdminBrindeBtn) {
-  confirmAdminBrindeBtn.addEventListener("click", async () => {
-    const admin_id = document.getElementById("adminIdBrinde").value.trim();
-    if (!admin_id) return alert("Informe o ID do usuário logado");
+  confirmAdminBrindeBtn.addEventListener("click", async (e) => {
+  e.preventDefault(); // previne comportamento padrão (submit)
 
-    try {
-      const res = await fetch(`${BASE_URL}/resgatar`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...resgatarData, admin_id })
-      });
+  const admin_id = document.getElementById("adminIdBrinde").value.trim();
+  if (!admin_id) return alert("Informe o ID do usuário logado");
 
-      const data = await res.json();
+  try {
+    const res = await fetch(`${BASE_URL}/resgatar`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...resgatarData, admin_id })
+    });
 
-      if (res.ok) {
-        alert("Pontos resgatados com sucesso!");
-        resgatarForm.reset();
-        if (adminModalBrinde) adminModalBrinde.style.display = "none";
-        loadParticipantes(); // atualizar tabela de participantes
-      } else {
-        alert(data.error || "Erro ao resgatar pontos");
-      }
-    } catch (err) {
-      console.error(err);
-      alert("Erro no servidor");
+    const data = await res.json();
+
+    if (res.ok) {
+      alert("Pontos resgatados com sucesso!");
+      resgatarForm.reset();
+      if (adminModalBrinde) adminModalBrinde.style.display = "none";
+      loadParticipantes(); // atualizar tabela de participantes
+    } else {
+      alert(data.error || "Erro ao resgatar pontos");
     }
-  });
+  } catch (err) {
+    console.error(err);
+    alert("Erro no servidor");
+  }
+});
 }

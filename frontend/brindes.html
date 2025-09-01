@@ -1,34 +1,113 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Brindes - Evento</title>
-  <link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Brindes</title>
+  <link rel="stylesheet" href="css/stylelogin.css" />
 </head>
 <body>
-    <header class="menu">
-  <nav>
-    <a href="participantes.html">Participantes</a>
-    <a href="brindes.html">Brindes</a>
-    <a href="pontuacao.html">Pontuação</a>
-    <a href="#" id="logout">Sair</a>
-  </nav>
-</header>
+  <!-- Grade neon de fundo -->
+  <div class="cyber-grid">
+    <div class="grid-line grid-h-1"></div>
+    <div class="grid-line grid-v-1"></div>
+    <div class="grid-line grid-h-2"></div>
+    <div class="grid-line grid-v-2"></div>
+    <div class="grid-line grid-h-3"></div>
+    <div class="cyber-glitch glitch-1"></div>
+    <div class="cyber-glitch glitch-2"></div>
+  </div>
+
+  <!-- Container principal -->
+  <main class="cyber-terminal2 full-width-terminal">
+
+    <!-- Barra superior com título e menu juntos -->
+    <div class="terminal-header terminal-header-flex">
+      <div class="terminal-left">
+        <div class="terminal-buttons">
+          <div class="term-btn btn-red"></div>
+          <div class="term-btn btn-yellow"></div>
+          <div class="term-btn btn-green"></div>
+        </div>
+        <div class="terminal-title">Resgatar pontos</div>
+      </div>
+
+      <nav class="terminal-menu">
+  <a href="participantes.html" class="nav-link active menu-btn">Participantes</a>
+  <a href="brindes.html" class="nav-link menu-btn">Brindes</a>
+  <a href="pontuacao.html" class="nav-link menu-btn">Pontuação</a>
+  <a href="#" id="logout" class="nav-link logout-link menu-btn">Sair</a>
+</nav>
+
+    </div>
+
+    <div class="cyber-content">
 
   <h1>Brindes</h1>
 
-  <form id="resgatarForm">
-  <input type="text" id="resgatarParticipanteId" placeholder="ID do participante" required>
-  <input type="number" id="resgatarPontos" placeholder="Quantidade de pontos" required>
-  <button type="submit">Resgatar pontos</button>
+  <form id="resgatarForm" class="neon-form" novalidate>
+  <!-- Campo ID do participante -->
+  <div class="cyber-field">
+    <div class="field-frame">
+      <div class="field-border"></div>
+      <input type="text" id="resgatarParticipanteId" name="resgatarParticipanteId" placeholder="ID do participante" required autocomplete="off" />
+      <label for="resgatarParticipanteId">&gt; ID DO PARTICIPANTE</label>
+      <div class="cyber-scanner"><div class="scan-line"></div></div>
+    </div>
+  </div>
+
+  <!-- Campo Quantidade de pontos -->
+  <div class="cyber-field">
+    <div class="field-frame">
+      <div class="field-border"></div>
+      <input type="number" id="resgatarPontos" name="resgatarPontos" placeholder="Quantidade de pontos" required autocomplete="off" />
+      <label for="resgatarPontos">&gt; QUANTIDADE DE PONTOS</label>
+      <div class="cyber-scanner"><div class="scan-line"></div></div>
+    </div>
+  </div>
+
+  <!-- Botão -->
+  <button type="submit" class="neon-button">
+    <div class="btn-matrix"></div>
+    <span class="btn-text">[ Resgatar pontos ]</span>
+    <div class="btn-loader">
+      <div class="matrix-loader">
+        <div class="matrix-bar"></div>
+        <div class="matrix-bar"></div>
+        <div class="matrix-bar"></div>
+        <div class="matrix-bar"></div>
+      </div>
+    </div>
+    <div class="btn-glow"></div>
+  </button>
 </form>
 
 <!-- Modal admin -->
-<div id="adminModalBrinde" style="display:none;">
-  <input type="text" id="adminIdBrinde" placeholder="ID do usuário logado" required>
-  <button id="confirmAdminBrinde">Confirmar</button>
+<div id="adminModalBrinde" style="display:none" class="modal-style">
+  <div class="cyber-field">
+    <div class="field-frame">
+      <div class="field-border"></div>
+      <input type="password" id="adminIdBrinde" name="adminIdBrinde" placeholder="ID do usuário logado" required autocomplete="off" />
+      <label for="adminIdBrinde">&gt; ID DO USUÁRIO</label>
+      <div class="cyber-scanner"><div class="scan-line"></div></div>
+    </div>
+  </div>
+
+  <button id="confirmAdminBrinde" type="button" class="neon-button">
+    <div class="btn-matrix"></div>
+    <span class="btn-text">[ Confirmar ]</span>
+    <div class="btn-loader">
+      <div class="matrix-loader">
+        <div class="matrix-bar"></div>
+        <div class="matrix-bar"></div>
+        <div class="matrix-bar"></div>
+        <div class="matrix-bar"></div>
+      </div>
+    </div>
+    <div class="btn-glow"></div>
+  </button>
 </div>
+
 
 
   <script src="js/main.js"></script>
