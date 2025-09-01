@@ -77,31 +77,53 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   // Adicionar participante
-  const addForm = document.getElementById("addParticipanteForm");
-  if (addForm) {
-    addForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const nome = document.getElementById("nome").value;
-      const documento = document.getElementById("documento").value;
+  // Dentro do DOMContentLoaded, se você estiver usando, ou do jeito que já está:
+const addForm = document.getElementById("addParticipanteForm");
+if (addForm) {
+  addForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-      try {
-        const res = await fetch(`${BASE_URL}/participantes`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ nome, documento })
-        });
-        if (res.ok) {
-          addForm.reset();
+    const id = document.getElementById("id").value.trim();
+    const nome = document.getElementById("nome").value.trim();
+    const documento = document.getElementById("documento").value.trim();
+
+    // validação igual à do backend (ajuda UX)
+    if (!/^\d+$/.test(id)) {
+      alert("O ID deve conter apenas números.");
+      return;
+    }
+    if (id.length < 6 || id.length > 14) {
+      alert("O ID deve ter entre 6 e 14 dígitos.");
+      return;
+    }
+    if (!nome) {
+      alert("Informe o nome.");
+      return;
+    }
+
+    try {
+      const res = await fetch(`${BASE_URL}/participantes`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, nome, documento })
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        addForm.reset();
+        // recarrega a lista
+        if (typeof loadParticipantes === "function") {
           loadParticipantes();
-        } else {
-          const err = await res.json();
-          alert(err.error || "Erro ao adicionar participante");
         }
-      } catch (err) {
-        alert("Erro ao conectar com servidor");
+      } else {
+        alert(data.error || "Erro ao adicionar participante");
       }
-    });
-  }
+    } catch (err) {
+      alert("Erro ao conectar com servidor");
+    }
+  });
+}
 
   loadParticipantes();
 
