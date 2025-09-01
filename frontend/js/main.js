@@ -57,16 +57,44 @@ if (usuarioLogadoDiv) {
   }
 }
 
+// Verifica login ativo
+const user = JSON.parse(localStorage.getItem("user"));
+const token = localStorage.getItem("token");
+
+if (!user || !token) {
+  window.location.href = "index.html"; // redireciona para login
+}
+let logoutTimer;
+const tempoInatividade = 10 * 60 * 1000; // 15 minutos
+
+const resetTimer = () => {
+  clearTimeout(logoutTimer);
+  logoutTimer = setTimeout(() => {
+    alert("Você foi desconectado por inatividade.");
+    localStorage.clear();
+    sessionStorage.clear();
+    window.location.href = "index.html";
+  }, tempoInatividade);
+};
+
+// Monitora atividade do usuário
+window.addEventListener("mousemove", resetTimer);
+window.addEventListener("keydown", resetTimer);
+window.addEventListener("scroll", resetTimer);
+
+// Inicia o timer ao carregar a página
+resetTimer();
 
   // --- Logout ---
   const logoutBtn = document.getElementById("logout");
-  if (logoutBtn) {
-    logoutBtn.addEventListener("click", () => {
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
-      window.location.href = "index.html";
-    });
-  }
+if (logoutBtn) {
+  logoutBtn.addEventListener("click", () => {
+    localStorage.clear();  // limpa tudo do localStorage
+    sessionStorage.clear(); // limpa tudo do sessionStorage
+    window.location.href = "index.html";
+  });
+}
+
 
   // --- Verificação de login ---
   if (!window.location.href.includes("index.html")) {
