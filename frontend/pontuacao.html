@@ -19,11 +19,17 @@
   <h1>Adicionar/Remover Pontos</h1>
 
   <form id="pontuacaoForm">
-    <input type="text" id="participanteId" placeholder="ID do Participante" required>
-    <input type="number" id="pontos" placeholder="Pontos" required>
-    <input type="text" id="motivo" placeholder="Motivo" required>
-    <button type="submit">Atualizar Pontuação</button>
-  </form>
+  <input type="text" id="participanteId" placeholder="ID do participante" required />
+  <input type="number" id="pontos" placeholder="Quantidade de pontos" required />
+  <button type="submit">Adicionar Pontos</button>
+</form>
+
+<!-- Modal -->
+<div id="adminModal" style="display:none">
+  <input type="text" id="adminId" placeholder="ID do usuário" />
+  <button id="confirmAdmin">Confirmar</button>
+</div>
+
 
   <script src="js/main.js"></script>
 </body>

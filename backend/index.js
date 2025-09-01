@@ -8,138 +8,50 @@ import jwt from "jsonwebtoken";
 dotenv.config();
 
 const app = express();
-app.use(cors({ origin: "*" }));
+app.use(cors());
 app.use(express.json());
 
-// Conectar ao Supabase
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
 
-// Rota inicial
+// --- Rota inicial ---
 app.get("/", (req, res) => {
   res.send("API do Evento funcionando!");
 });
 
-/* ===================== PARTICIPANTES ===================== */
-
-// Listar participantes
+// --- Listar participantes ---
 app.get("/participantes", async (req, res) => {
-  const { data, error } = await supabase
-    .from("participantes")
-    .select("*")
-    .order("criado_em", { ascending: false });
-
-  if (error) return res.status(500).json({ error: error.message });
+  const { data, error } = await supabase.from("participantes").select("*");
+  if (error) return res.status(500).json(error);
   res.json(data);
 });
 
-// Adicionar participante (ID manual: só números, ~10 dígitos)
+// --- Adicionar participante ---
 app.post("/participantes", async (req, res) => {
   const { id, nome, documento } = req.body;
-
-  // validações simples
-  if (!id || !nome) {
-    return res.status(400).json({ error: "ID e Nome são obrigatórios." });
-  }
-  const soNumeros = /^\d+$/;
-  if (!soNumeros.test(id)) {
-    return res.status(400).json({ error: "O ID deve conter apenas números." });
-  }
-  // faixa flexível: 6 a 14 dígitos (média ~10)
-  if (id.length < 6 || id.length > 14) {
-    return res.status(400).json({ error: "O ID deve ter entre 6 e 14 dígitos." });
-  }
-
-  const { data, error } = await supabase
-    .from("participantes")
-    .insert([{ id, nome, documento }])
-    .select();
-
-  if (error) {
-    // tratar violação de chave única (id ou documento)
-    if (error.code === "23505" || (error.message || "").toLowerCase().includes("duplicate")) {
-      return res.status(409).json({ error: "ID ou Documento já cadastrado." });
-    }
-    return res.status(500).json({ error: error.message });
-  }
-
-  res.status(201).json(data);
-});
-
-/* ===================== BRINDES ===================== */
-
-// Listar brindes
-app.get("/brindes", async (req, res) => {
-  const { data, error } = await supabase.from("brindes").select("*");
-  if (error) return res.status(500).json({ error: error.message });
-  res.json(data);
-});
-
-// Adicionar brinde
-app.post("/brindes", async (req, res) => {
-  const { nome, quantidade } = req.body;
-  const { data, error } = await supabase
-    .from("brindes")
-    .insert([{ nome, quantidade }])
-    .select();
-
-  if (error) return res.status(500).json({ error: error.message });
-  res.status(201).json(data);
-});
-
-// Resgatar brinde
-app.post("/brindes/resgatar", async (req, res) => {
-  const { participante_id, brinde_id, quantidade } = req.body;
-
   try {
-    // validação básica
-    if (!participante_id || !brinde_id || !quantidade || quantidade <= 0) {
-      return res.status(400).json({ error: "Dados inválidos para resgate." });
-    }
-
-    // busca brinde
-    const { data: brindeData, error: errorBrinde } = await supabase
-      .from("brindes")
-      .select("*")
-      .eq("id", brinde_id)
-      .single();
-    if (errorBrinde || !brindeData) throw new Error("Brinde não encontrado");
-    if ((brindeData.quantidade || 0) < quantidade) throw new Error("Estoque insuficiente");
-
-    // atualiza estoque
-    const { error: errorUpdate } = await supabase
-      .from("brindes")
-      .update({ quantidade: brindeData.quantidade - quantidade })
-      .eq("id", brinde_id);
-    if (errorUpdate) throw errorUpdate;
-
-    // registra histórico
-    const { error: errorHist } = await supabase
-      .from("historico_brindes")
-      .insert([{ participante_id, brinde_id, quantidade }]);
-    if (errorHist) throw errorHist;
-
-    res.json({ message: "Brinde resgatado com sucesso!" });
+    const { data, error } = await supabase
+      .from("participantes")
+      .insert([{ id, nome, documento }])
+      .select();
+    if (error) throw error;
+    res.status(201).json(data);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
-/* ===================== LOGIN (sem mudanças) ===================== */
-// Mantemos seu login como estava (por e-mail). Não mexi aqui.
-
+// --- Login por ID do usuário ---
 app.post("/login", async (req, res) => {
-  const { email, senha } = req.body;
+  const { id, senha } = req.body;
 
   try {
     const { data: users, error } = await supabase
       .from("usuarios")
       .select("*")
-      .eq("email", email)
+      .eq("id", id)
       .limit(1);
 
-    if (error || !users || users.length === 0) {
-      return res.status(400).json({ error: "Usuário não encontrado" });
-    }
+    if (error || users.length === 0) return res.status(400).json({ error: "Usuário não encontrado" });
 
     const user = users[0];
     const senhaValida = await bcrypt.compare(senha, user.senha);
@@ -153,12 +65,20 @@ app.post("/login", async (req, res) => {
   }
 });
 
-/* ===================== PONTUAÇÃO ===================== */
-
+// --- Adicionar pontos ao participante ---
 app.post("/pontuacao", async (req, res) => {
-  const { participante_id, pontos, motivo } = req.body;
+  const { participante_id, pontos, admin_id } = req.body;
 
   try {
+    // Validar usuário admin
+    const { data: user, error: userError } = await supabase
+      .from("usuarios")
+      .select("*")
+      .eq("id", admin_id)
+      .single();
+    if (userError || !user) throw new Error("Usuário administrador inválido");
+
+    // Buscar participante
     const { data: participanteData, error: errorBusca } = await supabase
       .from("participantes")
       .select("*")
@@ -166,8 +86,8 @@ app.post("/pontuacao", async (req, res) => {
       .single();
     if (errorBusca || !participanteData) throw new Error("Participante não encontrado");
 
-    const novaPontuacao = (participanteData.pontos || 0) + (pontos || 0);
-
+    // Atualizar pontos
+    const novaPontuacao = (participanteData.pontos || 0) + pontos;
     const { data: participanteAtualizado, error: errorUpdate } = await supabase
       .from("participantes")
       .update({ pontos: novaPontuacao })
@@ -175,9 +95,10 @@ app.post("/pontuacao", async (req, res) => {
       .select();
     if (errorUpdate) throw errorUpdate;
 
+    // Registrar histórico
     const { error: errorHist } = await supabase
       .from("historico_pontos")
-      .insert([{ participante_id, pontos, motivo }]);
+      .insert([{ participante_id, pontos }]);
     if (errorHist) throw errorHist;
 
     res.json({ message: "Pontuação atualizada", participante: participanteAtualizado });
@@ -186,7 +107,104 @@ app.post("/pontuacao", async (req, res) => {
   }
 });
 
-/* ===================== SERVER ===================== */
+// --- Resgatar pontos ---
+app.post("/resgatar", async (req, res) => {
+  const { participante_id, pontos, admin_id } = req.body;
+
+  try {
+    // Validar usuário admin
+    const { data: user, error: userError } = await supabase
+      .from("usuarios")
+      .select("*")
+      .eq("id", admin_id)
+      .single();
+    if (userError || !user) throw new Error("Usuário administrador inválido");
+
+    // Buscar participante
+    const { data: participanteData, error: errorBusca } = await supabase
+      .from("participantes")
+      .select("*")
+      .eq("id", participante_id)
+      .single();
+    if (errorBusca || !participanteData) throw new Error("Participante não encontrado");
+
+    if (participanteData.pontos < pontos) throw new Error("Pontuação insuficiente");
+
+    // Atualizar pontos
+    const novaPontuacao = participanteData.pontos - pontos;
+    const { data: participanteAtualizado, error: errorUpdate } = await supabase
+      .from("participantes")
+      .update({ pontos: novaPontuacao })
+      .eq("id", participante_id)
+      .select();
+    if (errorUpdate) throw errorUpdate;
+
+    // Registrar histórico
+    const { error: errorHist } = await supabase
+      .from("historico_pontos")
+      .insert([{ participante_id, pontos: -pontos }]);
+    if (errorHist) throw errorHist;
+
+    res.json({ message: "Pontos resgatados", participante: participanteAtualizado });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
+// Resgatar pontos para brindes
+app.post("/resgatar", async (req, res) => {
+  const { participante_id, pontos, admin_id } = req.body;
+
+  try {
+    if (!participante_id || !admin_id || !pontos) {
+      return res.status(400).json({ error: "Todos os campos são obrigatórios" });
+    }
+
+    // Verifica se o admin existe
+    const { data: adminData, error: errorAdmin } = await supabase
+      .from("usuarios")
+      .select("*")
+      .eq("id", admin_id)
+      .single();
+
+    if (errorAdmin || !adminData) return res.status(401).json({ error: "Usuário logado inválido" });
+
+    // Verifica se o participante existe
+    const { data: participanteData, error: errorParticipante } = await supabase
+      .from("participantes")
+      .select("*")
+      .eq("id", participante_id)
+      .single();
+
+    if (errorParticipante || !participanteData) {
+      return res.status(404).json({ error: "Participante não encontrado" });
+    }
+
+    if ((participanteData.pontos || 0) < pontos) {
+      return res.status(400).json({ error: "Pontuação insuficiente" });
+    }
+
+    // Subtrai os pontos
+    const novaPontuacao = participanteData.pontos - pontos;
+    const { data: participanteAtualizado, error: errorUpdate } = await supabase
+      .from("participantes")
+      .update({ pontos: novaPontuacao })
+      .eq("id", participante_id)
+      .select();
+
+    if (errorUpdate) throw errorUpdate;
+
+    // Registra histórico
+    const { error: errorHist } = await supabase
+      .from("historico_pontos")
+      .insert([{ participante_id, pontos: -pontos, motivo: "Resgate de brinde" }]);
+    if (errorHist) throw errorHist;
+
+    res.json({ message: "Pontos resgatados com sucesso!", participante: participanteAtualizado });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
+});

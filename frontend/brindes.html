@@ -18,23 +18,18 @@
 
   <h1>Brindes</h1>
 
-  <form id="addBrindeForm">
-    <input type="text" id="brindeNome" placeholder="Nome do Brinde" required>
-    <input type="number" id="brindeQuantidade" placeholder="Quantidade" required>
-    <button type="submit">Adicionar Brinde</button>
-  </form>
+  <form id="resgatarForm">
+  <input type="text" id="resgatarParticipanteId" placeholder="ID do participante" required>
+  <input type="number" id="resgatarPontos" placeholder="Quantidade de pontos" required>
+  <button type="submit">Resgatar pontos</button>
+</form>
 
-  <h2>Lista de Brindes</h2>
-  <table id="brindesTable">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Nome</th>
-        <th>Quantidade</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+<!-- Modal admin -->
+<div id="adminModalBrinde" style="display:none;">
+  <input type="text" id="adminIdBrinde" placeholder="ID do usuário logado" required>
+  <button id="confirmAdminBrinde">Confirmar</button>
+</div>
+
 
   <script src="js/main.js"></script>
 </body>
